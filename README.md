@@ -1,25 +1,29 @@
-# 🎮 Masacre en el Campus - Simulador Narrativo de Consola
+# Masacre en el Campus
 
-**Asignatura:** Construcción de Software (Quinto Semestre)  
-**Institución:** Institución Universitaria Colegio Mayor del Cauca  
-**Integrantes:** Juan Diego Borja Valdés | Beyker Cerón Montilla  
-**Presentado a:** Marta Cecilia Camacho Ojeda  
+Simulador narrativo en consola desarrollado en Java (JDK 17+). Permite a los estudiantes seleccionar una materia (Matemáticas, Física o Ingeniería) para instanciar a su profesor y un repertorio temático de 6 armas exclusivas.
 
----
-
-## 🛠️ Descripción del Proyecto
-Simulador narrativo interactivo desarrollado en **Java (JDK 17+)** para la terminal de comandos. Permite a los estudiantes canalizar el estrés académico seleccionando una materia (Matemáticas, Física o Ingeniería) para instanciar dinámicamente a su profesor y un repertorio temático de 6 armas exclusivas con animaciones en consola.
+En el segundo corte se añade la opción de ejecución personalizada: elegir la ubicación del campus (Biblioteca, Sala de Cómputo, Sala de Profesores o Aula de Clase), encadenar armas en combos y aplicar modificadores (golpe crítico o electrificada).
 
 ---
 
-## 🏗️ Arquitectura y Patrones Implementados
+## Arquitectura y Patrones
 
-- **Abstract Factory:** Interfaz `FabricaMateria` e implementaciones concretas por departamento para generar familias de objetos coherentes.
-- **Factory Method:** Método de instanciación encapsulado en cada fábrica para la creación de las 18 armas concretas.
-- **Builder:** Estructura compuesta por `PartidaBuilder`, `JuegoPartidaBuilder` y el orquestador `JuegoDirector` para ensamblar el objeto `Partida`.
-- **Principios SOLID:** Cumplimiento estricto de **SRP**, **LSP**, **ISP** y **DIP**. Infracción justificada al principio **OCP** en los bloques `switch/case` internos de creación.
-- **Clases Utilitarias:** `LectorEntrada` (captura defensiva estática) y `ConsolaUtil` (colores ANSI y formateo multilínea).
+### Primer Corte (Creacionales)
+- **Abstract Factory:** `FabricaMateria` e implementaciones por departamento.
+- **Factory Method:** Instanciación de las 18 armas concretas.
+- **Builder:** `PartidaBuilder`, `JuegoPartidaBuilder` y `JuegoDirector` para ensamblar la partida.
+
+### Segundo Corte (Estructurales)
+- **Decorator:** `ArmaDecorador`, `ArmaCritica` y `ArmaElectrificada` para modificadores dinámicos.
+- **Bridge:** `EscenarioJuego` / `EscenarioEjecucion` (abstracción) conectados con `LugarEjecucion` (implementación en las 4 zonas del campus).
+- **Composite:** `Arsenal` para agrupar armas y ejecutarlas como combo.
+
+### Clases Utilitarias
+- `LectorEntrada`: Captura de datos por consola.
+- `ConsolaUtil`: Formato multilínea y colores ANSI.
 
 ---
 
-## 🚀 Ejecución
+## Estructura del Proyecto
+
+Organizado en los paquetes: `core`, `armas`, `fabricas`, `builder`, `decorador`, `bridge`, `composite` y `cliente` (con `Main.java` como punto de entrada).
