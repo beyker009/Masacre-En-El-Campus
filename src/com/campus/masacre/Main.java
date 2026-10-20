@@ -4,6 +4,13 @@ import com.campus.masacre.builder.JuegoDirector;
 import com.campus.masacre.builder.JuegoPartidaBuilder;
 import com.campus.masacre.builder.Partida;
 import com.campus.masacre.builder.PartidaBuilder;
+import com.campus.masacre.bridge.AulaClase;
+import com.campus.masacre.bridge.Biblioteca;
+import com.campus.masacre.bridge.EscenarioEjecucion;
+import com.campus.masacre.bridge.LugarEjecucion;
+import com.campus.masacre.bridge.SalaComputo;
+import com.campus.masacre.bridge.SalaProfesores;
+import com.campus.masacre.cliente.PersonalizadorEjecucion;
 import com.campus.masacre.core.ConsolaUtil;
 import com.campus.masacre.core.LectorEntrada;
 import com.campus.masacre.fabricas.FabricaFisica;
@@ -49,6 +56,7 @@ public final class Main {
                 default -> throw new IllegalStateException("Opción inválida: " + opcion);
             };
 
+            partida.setPersonalizador(elegirPersonalizacion());
             partida.iniciar();
 
             ConsolaUtil.separadorPunteado();
@@ -58,6 +66,38 @@ public final class Main {
         }
 
         finalizar();
+    }
+
+    /**
+     * Pregunta el modo de ejecución. En modo clásico devuelve null (el juego
+     * se comporta exactamente como el original). En modo personalizado el
+     * usuario elige el lugar del campus (Bridge); luego se le ofrecerán
+     * combos (Composite) y modificadores (Decorator) en cada ejecución.
+     */
+    private static PersonalizadorEjecucion elegirPersonalizacion() {
+        System.out.println();
+        ConsolaUtil.separadorPunteado();
+        System.out.println(" " + ConsolaUtil.VERDE + "[1]" + ConsolaUtil.RESET + " Ejecución clásica");
+        System.out.println(" " + ConsolaUtil.VERDE + "[2]" + ConsolaUtil.RESET + " Ejecución personalizada (lugar, combos y modificadores)");
+        ConsolaUtil.separadorPunteado();
+        int modo = LectorEntrada.leerEnteroEnRango("\nElige el modo (1-2): ", 1, 2);
+        if (modo == 1) return null;
+
+        System.out.println("\n--- LUGAR DEL CAMPUS ---");
+        System.out.println(" " + ConsolaUtil.VERDE + "[1]" + ConsolaUtil.RESET + " Biblioteca");
+        System.out.println(" " + ConsolaUtil.VERDE + "[2]" + ConsolaUtil.RESET + " Sala de Cómputo");
+        System.out.println(" " + ConsolaUtil.VERDE + "[3]" + ConsolaUtil.RESET + " Sala de Profesores");
+        System.out.println(" " + ConsolaUtil.VERDE + "[4]" + ConsolaUtil.RESET + " Aula de Clase\n");
+        int lugarElegido = LectorEntrada.leerEnteroEnRango("Elige el lugar (1-4): ", 1, 4);
+
+        LugarEjecucion lugar = switch (lugarElegido) {
+            case 1 -> new Biblioteca();
+            case 2 -> new SalaComputo();
+            case 3 -> new SalaProfesores();
+            case 4 -> new AulaClase();
+            default -> throw new IllegalStateException("Opción inválida: " + lugarElegido);
+        };
+        return new PersonalizadorEjecucion(new EscenarioEjecucion(lugar));
     }
 
     private static void mostrarBannerInicio() {
@@ -114,4 +154,6 @@ public final class Main {
         ConsolaUtil.separadorDobleRojo();
         LectorEntrada.cerrar();
     }
-}   
+} 
+
+

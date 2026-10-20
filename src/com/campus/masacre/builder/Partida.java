@@ -1,5 +1,6 @@
 package com.campus.masacre.builder;
 
+import com.campus.masacre.cliente.PersonalizadorEjecucion;
 import com.campus.masacre.core.Arma;
 import com.campus.masacre.core.ConsolaUtil;
 import com.campus.masacre.core.LectorEntrada;
@@ -9,6 +10,7 @@ public class Partida {
 
     private Profesor profesorActual;
     private Arma[] armasDisponibles;
+    private PersonalizadorEjecucion personalizador;
 
     public Partida() {}
 
@@ -23,6 +25,11 @@ public class Partida {
 
     public void setArmasDisponibles(Arma[] armas) {
         this.armasDisponibles = armas;
+    }
+
+    /** Opcional: activa escenario (Bridge), combos (Composite) y modificadores (Decorator). */
+    public void setPersonalizador(PersonalizadorEjecucion personalizador) {
+        this.personalizador = personalizador;
     }
 
     public void iniciar() {
@@ -53,7 +60,11 @@ public class Partida {
                 enArsenal = false;
             } else {
                 Arma armaSeleccionada = armasDisponibles[seleccion - 1];
-                armaSeleccionada.ejecutarSecuencia(profesorActual.getNombre());
+                if (personalizador == null) {
+                    armaSeleccionada.ejecutarSecuencia(profesorActual.getNombre());
+                } else {
+                    personalizador.ejecutar(armaSeleccionada, armasDisponibles, profesorActual.getNombre());
+                }
             }
         }
     }
